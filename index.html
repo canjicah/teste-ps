@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script src="components/fade-teleporter.js"></script>
+    <script src="components/buttonlistener.js"></script>
+    <script src="components/follow-hand.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/creditos.js"></script>
+    <script src="js/inicio.js"></script>
+    <script src="js/productos-json.js"></script>
+    <script src="js/calorias.js"></script>
+    <script src="js/retroalimentacion.js"></script>
+    <script src="js/carrito.js"></script>
+    <script src="js/productos.js"></script>
+    <script src="js/checkout.js"></script>
+    <script src="js/perfil-alumno.js"></script>
+    <script src="js/tutorial.js"></script>
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="components/animation-mixer.js"></script>
+    <!--script src="components/aframe-extras.loaders.min.js"></script-->
+    <script src="https://unpkg.com/aframe-aabb-collider-component@^2.2.1/dist/aframe-aabb-collider-component.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.0/dist/aframe-extras.min.js"></script>
+    <script src="https://rawgit.com/fernandojsg/aframe-teleport-controls/master/dist/aframe-teleport-controls.min.js"></script>
+    <script src="https://unpkg.com/aframe-look-at-component@0.8.x/dist/aframe-look-at-component.min.js"></script>
+    <script src="https://supereggbert.github.io/aframe-htmlembed-component/dist/build.js"></script>
+    <!--<script src="https://unpkg.com/super-hands@3.0.0/dist/super-hands.min.js"></script>-->
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta property="og:title" content="MiRV | Ciencia de Datos / Nutrición | Calorías + x -" />
+    <meta property="og:description" content="Recorre un supermercado virtual, aprovecha para reflexionar sobre tu ingesta diaria de calorías, azúcares, sodio y grasas. Los datos sobre tu consumo y demografía se utilizarán anónimamente en una práctica posterior que se usará con Big Data."
+    />
+    <meta property="og:image" content="https://supermercado2.andycandys.repl.co/assets/og-image2.jpg" />
+    <title>MiRV | Ciencia de Datos / Nutrición | Calorías + x -</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">-->
+</head>
+
+<body>
+    <div id="perfil_alumno" class="perfil_alumno">
+        <br>
+        <h2>Registra tu perfil</h2><br>
+        <form>
+            <div class="form-group" style="width:90%; margin-left:5%">
+                <label for="sel1"><strong>Rango de edad:</strong></label>
+                <select class="form-control" id="edad" name="Edad">
+        <option value="e0">Seleccionar...</option>
+        <option value="e1">&#60;18</option>
+        <option value="e2">18-25</option>
+        <option value="e3">26-35</option>
+        <option value="e4">36-50</option>	
+        <option value="e5">51&#60;</option>	
+      </select>
+            </div>
+            <div class="form-group" style="width:90%; margin-left:5%">
+                <label for="sel1"><strong>Sexo biológico de nacimiento:</strong></label>
+                <select class="form-control" id="sexo" name="Sexo">
+        <option value="s0">Seleccionar...</option>
+        <option value="s1">Masculino</option>
+        <option value="s2">Femenino</option>
+        <option value="s3">Intersexual</option>
+      </select>
+            </div>
+            <div class="form-group" style="width:90%; margin-left:5%">
+                <label for="sel1"><strong>Actividad física:</strong></label>
+                <select class="form-control" id="actividad" name="actividad">
+        <option value="a0">Seleccionar...</option>
+        <option value="a1">Menos de 3 veces al mes</option>
+        <option value="a2">1 o 2 veces por semana</option>
+        <option value="a3">3 o 4 veces por semana</option>
+        <option value="a4">Más de 4 veces por semana</option>	
+      </select>
+            </div>
+        </form>
+        <br>
+        <p style="text-align:center" id="msg-error"></p>
+        <button class="btn_guardar" onclick="guardarPerfil()">Guardar</button>
+    </div>
+
+    <!--Efecto lightbox-->
+    <div id="fade-init" class="fadebox"></div>
+    <div id="fade-init2" class="fadeboxInit"></div>
+
+    <!--Loader-->
+    <div id="logoTec" class="logoTec"><img src="assets/png/logoTec.png" width="288" height="89"></div>
+    <div id="btnComenzar" class="btnComenzar">
+        <a onclick="comenzarActividad()" class="button2">Comenzar</a>
+    </div>
+    <div id="footer" class="footer">
+        <a href="https://www.facebook.com/MIRVERS" target="_blank" id="logoMirv"><img src="assets/png/logoMirv.png" width="100" height="53"></a>
+        <p class="credits"><br>D.R. Instituto Tecnológico y de Estudios Superiores de Monterrey, México, 2021 | <span class="creditos" onclick="openCreditos()">Créditos</span></p>
+    </div>
+
+    <div id="fade" class="fadebox" onclick="document.getElementById('carrito').style.visibility='hidden'; document.getElementById('btn_vaciar').style.visibility='hidden'; document.getElementById('fade').style.display='none'; document.getElementById('verContainer').style.visibility='hidden'; document.getElementById('fade').style.display='none'; document.getElementById('perfil_alumno').style.visibility='hidden'; cancelar();"></div>
+
+    <!--Mensajes tutorial-->
+    <div id="msg01" class="msgContainer" style="text-align:center; font-size:18px;">
+        <div class="pulse-animation"></div><br>
+        <div class="messages">
+            <hr style="width:80%;">
+            <div id="mensajesTutorial">
+            </div>
+            <hr style="width:80%">
+        </div>
+    </div>
+
+    <!--Ventana verificar -->
+    <div id="verContainer" class="verContainer">
+        <div id="sellos" class="sellos">
+        </div>
+        <div id="botones">
+            <button id="confirmar" class="btn-confirmar" onclick="confirmar()"><span class='glyphicon glyphicon-ok'/></button>
+            <button id="cancelar" class="btn-cancelar" onclick="cancelar()"><span class='glyphicon glyphicon-remove'/></button>
+        </div>
+        <br>
+        <!--Imagen del producto-->
+        <div style="text-align:center" id="imgProducto"></div>
+        <!--Nombre del producto-->
+        <p style="text-align:center" id="nombreProducto"></p>
+        <br>
+        <!--Info nutrimental-->
+        <div id="infoNutrimental" class="infoNutrimental">
+            <p style="text-align:left; color: #000; font-weight: bold">Cada porción de este envase aporta:</p>
+            <div style="margin-bottom:5px">
+                <div class="infoNut">
+                    <p class="txtTitulo">Grasa saturada Cal/kcal</p>
+                    <p id="grasaSat" class="txtInfo"></p>
+                </div>
+                <div class="infoNut">
+                    <p class="txtTitulo">Otras grasas Cal/kcal</p>
+                    <p id="grasasOtras" class="txtInfo"></p>
+                </div>
+                <div class="infoNut">
+                    <p class="txtTitulo">Azúcares totales Cal/kcal</p>
+                    <p id="azucares" class="txtInfo"></p>
+                </div>
+                <div class="infoNut">
+                    <p class="txtTitulo">Sodio mg/g</p><br>
+                    <p id="sodio" class="txtInfo"></p>
+                </div>
+                <div class="infoNut">
+                    <p class="txtTitulo">Energía Cal/kcal</p><br>
+                    <p id="energia" class="txtInfo"></p>
+                </div>
+            </div>
+            <p id="porciones" class="porciones" style="text-align:left; color: #000; font-weight: bold;">></p>
+        </div>
+        <!--Cantidad-->
+        <br>
+        <p style="text-align:center">Cantidad</p>
+        <div class="qtyCounter">
+            <button class="btn-menos" onclick="down('1')"><span class='glyphicon glyphicon-minus'/></button>
+            <div class="txtInput" id="myNumber">0</div>
+            <button class="btn-mas" onclick="up()"><span class='glyphicon glyphicon-plus'/></button>
+        </div>
+    </div>
+
+    <!--Calorías-->
+    <div id="cals" style="visibility:hidden; top:33px; z-index:1; position:absolute; left:80px; color:white; background-color:#2F2D2D; border-radius:20px; padding-left:60px; padding-right:15px; font-size:36px; font-weight:bold; font-family: Arial, " Verdana
+        ", Helvetica, sans-serif; float: left;">0 kcal</div>
+    <!--Botón reiniciar-->
+    <button id="reiniciar" style="bottom:10px; z-index:1; position:absolute; left:50%; right:50%; visibility:hidden;" class='btn_msg' onclick='reiniciar()'>Reiniciar</button>
+
+    <!--Carrito de compras-->
+    <div class="w3-container">
+        <div id="contadorCarrito" class="contadorCarrito" style="visibility:hidden">0</div>
+        <div id="btn_carrito" class="btn_carrito" style="visibility:hidden" onclick="document.getElementById('carrito').style.visibility='visible'; document.getElementById('fade').style.display='block';"><span class="glyphicon glyphicon-shopping-cart" /></div>
+        <div id="carrito" class="listaContainer" style="visibility: hidden">
+            <div class="listaHeader">
+                <div class="listaTitle"><strong>Carrito de compras</strong></div>
+                <div class="listaClose" onclick="reset(); document.getElementById('carrito').style.visibility='hidden'; document.getElementById('btn_vaciar').style.visibility='hidden'; document.getElementById('fade').style.display='none';"><span class="glyphicon glyphicon-remove" /></div>
+            </div>
+
+            <div id="listaProductos" class="w3-container">
+                <p id="carrito_vacio" style="margin-left:15px"></p>
+                <div class="row fila2 container">
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-5"></div>
+                    <div class="col-sm-5" id="porcionesRow" style="padding-left:35px"></div>
+                    <div class="col-sm-1"></div>
+                </div>
+                <div id="tablaProductos" style="overflow-y: auto; height: 300px; overflow-x: hidden;">
+                </div>
+                <div id="btn_vaciar" class="btn_vaciar" onclick="vaciar()">Vaciar carrito</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ModalCreditos -->
+    <div class="modal-wrapper" id="modalWrapperCreditos">
+        <div class="modal" id="modalCreditos">
+            <div class="headerMsg">
+                <div class="closeButton">
+                    <div class="txtMsg">Créditos</div>
+                    <div class="closeIcon">
+                        <a href="#" onclick="cierraCreditos()">
+                            <span class='glyphicon glyphicon-remove btnClose'></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="content">
+                <div class="good-job">
+                    <br>
+                    <p style="text-align:center; color:#272727; vertical-align:middle; font-size:13px"><strong>Artistas 3D</strong><br>Adrián Ayala Luévanos<br>Edgar Ernesto Garza Escobedo</p>
+                    <p style="text-align:center; color:#272727; vertical-align:middle; font-size:13px"><strong>Desarrollador virtual</strong><br>Andrea Sandoval Treviño</p>
+                    <p style="text-align:center; color:#272727; vertical-align:middle; font-size:13px"><strong>Diseño de interfaz de usuario</strong><br>Ariadna Lizbeth Murguia Hernández<br>Daniel Jesús González Guzman</p>
+                    <p style="text-align:center; color:#272727; vertical-align:middle; font-size:13px"><strong>Diseño de sonido</strong><br>Allan Acosta Garduño</p>
+                    <p style="text-align:center; color:#272727; vertical-align:middle; font-size:13px"><strong>Productor creativo</strong><br>Mauricio Martínez González</p>
+                    <p style="text-align:center; color:#272727; vertical-align:middle; font-size:13px"><strong>Diseño instruccional</strong><br>Pedro de Jesús García Reza</p>
+                    <p style="text-align:center; color:#272727; vertical-align:middle; font-size:13px"><strong>Experto de contenido</strong><br>Jesús Aguilar González</p>
+                    <p style="text-align:center; color:#272727; vertical-align:middle; font-size:13px"><strong>Líder de innovación</strong><br>Ana Gabriela Rodríguez Mendoza</p>
+                    <p style="text-align:center; color:#272727; vertical-align:middle; font-size:13px"><strong>Administrador de proyecto</strong><br>Brenda Aimé Luis Chavira</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <a-scene vr-mode-ui="enabled: false" id="escena" gltf-model="dracoDecoderPath:draco/" renderer="physicallyCorrectLights:true; colorManagement:true;">
+
+        <!--Carga assets -->
+        <a-assets>
+            <!--audios-->
+            <a-asset-item id="backgroundmusic" src="assets/audios/backgroundmusic.mp3" response-type="arraybuffer"></a-asset-item>
+            <a-asset-item id="cancel" src="assets/audios/cancel.mp3" response-type="arraybuffer"></a-asset-item>
+            <a-asset-item id="cash" src="assets/audios/cash.mp3" response-type="arraybuffer"></a-asset-item>
+            <a-asset-item id="message" src="assets/audios/message.mp3" response-type="arraybuffer"></a-asset-item>
+            <a-asset-item id="open" src="assets/audios/open.mp3" response-type="arraybuffer"></a-asset-item>
+            <!--navmesh-->
+            <a-asset-item id="navmesh" src="assets/NaveMesh.glb"></a-asset-item>
+            <!--supermercado-->
+            <a-asset-item id="supermercado" src="assets/Market.glb"></a-asset-item>
+            <!--personaje tienda-->
+            <a-asset-item id="empleado" src="assets/PersonaSuperM.glb"></a-asset-item>
+            <a-asset-item id="tutorial-room" src="assets/tutorial/TutorialRoom.glb"></a-asset-item>
+            <a-asset-item id="estante-tutorial" src="assets/tutorial/Estante_tutorial.glb"></a-asset-item>
+            <a-asset-item id="navmesh2" src="assets/tutorial/FloorPlan.glb"></a-asset-item>
+            <a-asset-item id="flechas" src="assets/tutorial/flechas.glb"></a-asset-item>
+        </a-assets>
+
+
+
+        <!-- Botón inicio -->
+        <a-entity id="inicio" htmlembed class="clickable" scale=".8 .8 .8" position="7.89 1.14 -14.09" rotation="0 45 0">
+            <button id="btn-inicio" class="botonesEmbed" onclick="inicio()" onmouseover="embedMouseOver(this)" onmouseout="embedMouseOut(this)">Iniciar</button>
+        </a-entity>
+
+
+        <!-- Botones checkout -->
+        <a-entity id="checkoutCaja1" htmlembed class="clickable checkoutCaja" scale="0 0 0" position="2.72 1.14 -13.24" rotation="0 180 0">
+            <button class="botonesEmbed" onclick="checkout()" onmouseover="embedMouseOver(this)" onmouseout="embedMouseOut(this)">Checkout</button>
+        </a-entity>
+        <a-entity id="checkoutCaja2" htmlembed class="clickable checkoutCaja" scale="0 0 0" position="-2.72 1.14 -13.24" rotation="0 180 0">
+            <button class="botonesEmbed" onclick="checkout()" onmouseover="embedMouseOver(this)" onmouseout="embedMouseOut(this)">Checkout</button>
+        </a-entity>
+        <a-entity id="checkoutCaja3" htmlembed class="clickable checkoutCaja" scale="0 0 0" position="-8.24 1.14 -13.24" rotation="0 180 0">
+            <button class="botonesEmbed" onclick="checkout()" onmouseover="embedMouseOver(this)" onmouseout="embedMouseOut(this)">Checkout</button>
+        </a-entity>
+
+
+        <!-- MODELOS -->
+        <!--<a-entity gltf-model="#navmesh" nav-mesh visible="false" position="0 0 0" scale="0 0 0"></a-entity> -->
+        <a-box material="side:double; shader:flat" position="200 0 0" color="#fff" scale="50 50 50"></a-box>
+        <a-entity gltf-model="#tutorial-room" id="tutorialRoom" position="200 0 0"></a-entity>
+        <a-entity gltf-model="#flechas" id="flechasAnim" animation-mixer="clip: clip_paso1" position="200 0 0" scale="0 0 0"></a-entity>
+        <a-entity gltf-model="#estante-tutorial" id="estanteTutorial" position="192.42 0 22.09"></a-entity>
+        <a-entity geometry="primitive:cylinder" id="spotTutorial" position="201.48 -0.14 -2.58" scale=".4 .15 .4" material="color: #3685b3; opacity: .9; metalness: .3" visible="false"></a-entity>
+        <a-entity gltf-model="#navmesh2" id="navMesh" nav-mesh visible="false" position="200 0 0"></a-entity>
+        <a-entity geometry="primitive: box" id="papas-fritasTuto" class="cajasTuto" scale="0 0 0" position="202.02 1.29 -4.30" rotation="0 0 0" visible="false" onclick="verificar(this)" value="0"></a-entity>
+        <a-entity geometry="primitive: box" id="botana-saludableTuto" class="cajasTuto" scale="0 0 0" position="200.99 1.29 -4.30" rotation="0 0 0" visible="false" onclick="verificar(this)" value="73"></a-entity>
+        <a-entity id="super" position="0 0 0" cube-env-map="path: envmap/;extension: jpg;"></a-entity>
+        <!-- <a-entity gltf-model="#supermercado" id="super" position="0 0 0" cube-env-map="path: envmap/;extension: jpg;"></a-entity>-->
+        <a-entity gltf-model="#empleado" id="personaje" animation-mixer="clip:Iddle2" scale="1 1 1" rotation="0 225 0" position="7.65 0.07 -14.33"></a-entity>
+        <a-entity geometry="primitive: box" id="papas-fritas" scale="0 0 0" position="8.60 1.32 -25.47" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="0"></a-entity>
+        <a-entity geometry="primitive: box" id="papas-queso" scale="0 0 0" position="8.63 1.3 -26.48" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="1"></a-entity>
+        <a-entity geometry="primitive: box" id="galletas" scale="0 0 0" position="-2.31 1.34 -34.27" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="2"></a-entity>
+        <a-entity geometry="primitive: box" id="galletas-chispas" scale="0 0 0" position="-2.32 1.34 -33.29" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="3"></a-entity>
+        <a-entity geometry="primitive: box" id="barra-chocolate" scale="0 0 0" position="-2.32 1.34 -32.32" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="4"></a-entity>
+        <a-entity geometry="primitive: box" id="chocolate-polvo" scale="0 0 0" position="-2.31 1.34 -31.36" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="5"></a-entity>
+        <a-entity geometry="primitive: box" id="atun" scale="0 0 0" position="2.94 1.34 -26.50" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="6"></a-entity>
+        <a-entity geometry="primitive: box" id="jamon-enlatado" scale="0 0 0" position="2.94 1.34 -25.57" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="7"></a-entity>
+        <a-entity geometry="primitive: box" id="frijoles" scale="0 0 0" position="2.94 1.34 -27.51" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="8"></a-entity>
+        <a-entity geometry="primitive: box" id="mayonesa" scale="0 0 0" position="2.94 1.34 -28.46" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="9"></a-entity>
+        <a-entity geometry="primitive: box" id="catsup" scale="0 0 0" position="2.94 1.34 -29.40" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="10"></a-entity>
+        <a-entity geometry="primitive: box" id="carne-hamburguesas" scale="0 0 0" position="15.24 1.29 -36.47" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="11"></a-entity>
+        <a-entity geometry="primitive: box" id="sandwich" scale="0 0 0" position="15.24 1.29 -38.70" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="12"></a-entity>
+        <a-entity geometry="primitive: box" id="refresco" scale="0 0 0" position="-0.18 1.3 -16.51" visible="false" class="cajas" onclick="verificar(this)" value="13"></a-entity>
+        <a-entity geometry="primitive: box" id="refresco-lata" scale="0 0 0" position="8.54 1.32 -34.16" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="14"></a-entity>
+        <a-entity geometry="primitive: box" id="refresco-lata-light" scale="0 0 0" position="8.54 1.32 -33.03" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="15"></a-entity>
+        <a-entity geometry="primitive: box" id="refresco-toronja" scale="0 0 0" position="8.54 1.32 -31.96" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="16"></a-entity>
+        <a-entity geometry="primitive: box" id="jugo" scale="0 0 0" position="8.54 1.32 -29.77" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="17"></a-entity>
+        <a-entity geometry="primitive: box" id="agua" scale="0 0 0" position="8.54 1.32 -30.86" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="18"></a-entity>
+        <a-entity geometry="primitive: box" id="aguacate" scale="0 0 0" position="18.39 1.28 -13.30" rotation="0 -90 38.74" visible="false" class="cajas" onclick="verificar(this)" value="19"></a-entity>
+        <a-entity geometry="primitive: box" id="tomate" scale="0 0 0" position="18.36 1.27 -11.11" rotation="0 -90 -37" visible="false" class="cajas" onclick="verificar(this)" value="20"></a-entity>
+        <a-entity geometry="primitive: box" id="platano" scale="0 0 0" position="18.43 1.30 -17.17" rotation="0 -90 -37" visible="false" class="cajas" onclick="verificar(this)" value="21"></a-entity>
+        <a-entity geometry="primitive: box" id="manzana" scale="0 0 0" position="17.76 1.28 -12.19" rotation="0 0 27.81" visible="false" class="cajas" onclick="verificar(this)" value="22"></a-entity>
+        <a-entity geometry="primitive: box" id="papaya" scale="0 0 0" position="18.39 1.28 -19.39" rotation="0 -90 37.5" visible="false" class="cajas" onclick="verificar(this)" value="23"></a-entity>
+        <a-entity geometry="primitive: box" id="pera" scale="0 0 0" position="19.01 1.26 -12.19" rotation="0 0 -27" visible="false" class="cajas" onclick="verificar(this)" value="24"></a-entity>
+        <a-entity geometry="primitive: box" id="sandia" scale="0 0 0" position="17.69 1.34 -18.31" rotation="0 0 27.81" visible="false" class="cajas" onclick="verificar(this)" value="25"></a-entity>
+        <a-entity geometry="primitive: box" id="melon" scale="0 0 0" position="19.07 1.28 -18.35" rotation="0 0 -27" visible="false" class="cajas" onclick="verificar(this)" value="26"></a-entity>
+        <a-entity geometry="primitive: box" id="huevo" scale="0 0 0" position="-14.96 1.34 -39.52" rotation="0 -90 0" visible="false" class="cajas" onclick="verificar(this)" value="27"></a-entity>
+        <a-entity geometry="primitive: box" id="pollo" scale="0 0 0" position="15.24 1.32 -34.22" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="28"></a-entity>
+        <a-entity geometry="primitive: box" id="carne-sirloin" scale="0 0 0" position="15.24 1.32 -29.85" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="29"></a-entity>
+        <a-entity geometry="primitive: box" id="carne-milanesa" scale="0 0 0" position="15.24 1.32 -32.05" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="30"></a-entity>
+        <a-entity geometry="primitive: box" id="salchichas" scale="0 0 0" position="4.52 1.23 -42.83" visible="false" class="cajas" onclick="verificar(this)" value="31"></a-entity>
+        <a-entity geometry="primitive: box" id="pan-blanco" scale="0 0 0" position="3.77 1.34 -26.04" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="32"></a-entity>
+        <a-entity geometry="primitive: box" id="pan-integral" scale="0 0 0" position="3.77 1.34 -27.51" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="33"></a-entity>
+        <a-entity geometry="primitive: box" id="pan-sin-gluten" scale="0 0 0" position="3.77 1.34 -28.47" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="34"></a-entity>
+        <a-entity geometry="primitive: box" id="cereal-azucarado" scale="0 0 0" position="3.67 1.34 -32.77" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="35"></a-entity>
+        <a-entity geometry="primitive: box" id="cereal-reducido" scale="0 0 0" position="3.69 1.34 -34.25" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="36"></a-entity>
+        <a-entity geometry="primitive: box" id="queso-oaxaca" scale="0 0 0" position="11.04 1.23 -42.83" visible="false" class="cajas" onclick="verificar(this)" value="37"></a-entity>
+        <a-entity geometry="primitive: box" id="queso-asadero" scale="0 0 0" position="12.16 1.23 -42.83" visible="false" class="cajas" onclick="verificar(this)" value="38"></a-entity>
+        <a-entity geometry="primitive: box" id="queso-panela" scale="0 0 0" position="9.98 1.23 -42.83" visible="false" class="cajas" onclick="verificar(this)" value="39"></a-entity>
+        <a-entity geometry="primitive: box" id="leche-entera" scale="0 0 0" position="-17.03 1.22 -37.08" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="40"></a-entity>
+        <a-entity geometry="primitive: box" id="leche-light" scale="0 0 0" position="-17.03 1.22 -35.46" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="41"></a-entity>
+        <a-entity geometry="primitive: box" id="leche-deslactosada" scale="0 0 0" position="-17.03 1.22 -34.36" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="42"></a-entity>
+        <a-entity geometry="primitive: box" id="leche-deslactosada-light" scale="0 0 0" position="-17.03 1.22 -33.28" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="43"></a-entity>
+        <a-entity geometry="primitive: box" id="leche-almendra" scale="0 0 0" position="-17.03 1.22 -32.18" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="44"></a-entity>
+        <a-entity geometry="primitive: box" id="tortillas-harina" scale="0 0 0" position="3.72 1.34 -29.41" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="45"></a-entity>
+        <a-entity geometry="primitive: box" id="tortillas-integral" scale="0 0 0" position="3.72 1.34 -30.40" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="46"></a-entity>
+        <a-entity geometry="primitive: box" id="tortillas-maiz" scale="0 0 0" position="3.72 1.34 -31.35" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="47"></a-entity>
+        <a-entity geometry="primitive: box" id="bebida-isotonica" scale="0 0 0" position="-3.08 1.34 -34.25" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="48"></a-entity>
+        <a-entity geometry="primitive: box" id="cerveza" scale="0 0 0" visible="false" class="cajas" onclick="verificar(this)" value="49"></a-entity>
+        <a-entity geometry="primitive: box" id="bebida-energetica" scale="0 0 0" position="-3.09 1.34 -33.29" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="50"></a-entity>
+        <a-entity geometry="primitive: box" id="brocoli" scale="0 0 0" position="16.70 1.14 -7.42" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="51"></a-entity>
+        <a-entity geometry="primitive: box" id="cebolla" scale="0 0 0" position="22.92 1.14 -12.79" visible="false" class="cajas" onclick="verificar(this)" value="52"></a-entity>
+        <a-entity geometry="primitive: box" id="elote" scale="0 0 0" position="22.92 1.14 -19.46" visible="false" class="cajas" onclick="verificar(this)" value="53"></a-entity>
+        <a-entity geometry="primitive: box" id="espinaca" scale="0 0 0" position="18.92 1.14 -7.42" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="54"></a-entity>
+        <a-entity geometry="primitive: box" id="mostaza" scale="0 0 0" position="2.94 1.34 -30.40" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="55"></a-entity>
+        <a-entity geometry="primitive: box" id="papa" scale="0 0 0" position="22.92 1.14 -14.98" visible="false" class="cajas" onclick="verificar(this)" value="56"></a-entity>
+        <a-entity geometry="primitive: box" id="pepino" scale="0 0 0" position="21.12 1.14 -7.42" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="57"></a-entity>
+        <a-entity geometry="primitive: box" id="zanahoria" scale="0 0 0" position="22.92 1.14 -17.27" visible="false" class="cajas" onclick="verificar(this)" value="58"></a-entity>
+        <a-entity geometry="primitive: box" id="calabacita" scale="0 0 0" position="22.92 1.14 -21.70" visible="false" class="cajas" onclick="verificar(this)" value="59"></a-entity>
+        <a-entity geometry="primitive: box" id="lechuga" scale="0 0 0" position="22.92 1.14 -10.59" visible="false" class="cajas" onclick="verificar(this)" value="60"></a-entity>
+        <a-entity geometry="primitive: box" id="barra-granola-crujiente" scale="0 0 0" position="-2.31 1.34 -29.41" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="61"></a-entity>
+        <a-entity geometry="primitive: box" id="barra-granola-almendras" scale="0 0 0" position="-2.31 1.34 -30.40" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="62"></a-entity>
+        <a-entity geometry="primitive: box" id="yogurt-fresa" scale="0 0 0" position="-17.03 1.22 -30.99" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="63"></a-entity>
+        <a-entity geometry="primitive: box" id="licuado-yogurt" scale="0 0 0" position="-17.03 1.22 -29.90" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="64"></a-entity>
+        <a-entity geometry="primitive: box" id="yogurt-natural" scale="0 0 0" position="-17.03 1.22 -27.67" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="65"></a-entity>
+        <a-entity geometry="primitive: box" id="arroz" scale="0 0 0" position="2.94 1.34 -33.28" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="66"></a-entity>
+        <a-entity geometry="primitive: box" id="pescado" scale="0 0 0" position="15.87 1.06 -25.04" rotation="0 135 0" visible="false" class="cajas" onclick="verificar(this)" value="67"></a-entity>
+        <a-entity geometry="primitive: box" id="camaron" scale="0 0 0" position="15.24 1.06 -26.93" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="68"></a-entity>
+        <a-entity geometry="primitive: box" id="queso-manchego" scale="0 0 0" position="8.87 1.23 -42.83" visible="false" class="cajas" onclick="verificar(this)" value="69"></a-entity>
+        <a-entity geometry="primitive: box" id="queso-americano" scale="0 0 0" position="7.8 1.23 -42.83" visible="false" class="cajas" onclick="verificar(this)" value="70"></a-entity>
+        <a-entity geometry="primitive: box" id="jamon-pavo" scale="0 0 0" position="5.57 1.23 -42.83" visible="false" class="cajas" onclick="verificar(this)" value="71"></a-entity>
+        <a-entity geometry="primitive: box" id="jamon-pierna" scale="0 0 0" position="6.67 1.23 -42.83" visible="false" class="cajas" onclick="verificar(this)" value="72"></a-entity>
+        <a-entity geometry="primitive: box" id="botana-saludable" scale="0 0 0" position="8.63 1.3 -27.55" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="73"></a-entity>
+        <a-entity geometry="primitive: box" id="elote-enlatado" scale="0 0 0" position="2.94 1.34 -32.32" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="74"></a-entity>
+        <a-entity geometry="primitive: box" id="fruta-almibar" scale="0 0 0" position="2.94 1.34 -31.37" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="75"></a-entity>
+        <a-entity geometry="primitive: box" id="cajeta" scale="0 0 0" position="-2.31 1.34 -27.48" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="76"></a-entity>
+        <a-entity geometry="primitive: box" id="crema-cacahuate" scale="0 0 0" position="-2.31 1.34 -28.44" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="77"></a-entity>
+        <a-entity geometry="primitive: box" id="te-negro-durazno" scale="0 0 0" position="8.54 1.32 -28.66" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="78"></a-entity>
+        <a-entity geometry="primitive: box" id="mantequilla" scale="0 0 0" position="-13.33 1.34 -39.52" rotation="0 -90 0" visible="false" class="cajas" onclick="verificar(this)" value="79"></a-entity>
+        <a-entity geometry="primitive: box" id="margarina" scale="0 0 0" position="-12.22 1.34 -39.52" rotation="0 -90 0" visible="false" class="cajas" onclick="verificar(this)" value="80"></a-entity>
+        <a-entity geometry="primitive: box" id="mermelada" scale="0 0 0" position="-2.31 1.34 -26.48" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="81"></a-entity>
+        <a-entity geometry="primitive: box" id="nieve-limon" scale="0 0 0" position="-11.04 1.34 -39.52" rotation="0 -90 0" visible="false" class="cajas" onclick="verificar(this)" value="82"></a-entity>
+        <a-entity geometry="primitive: box" id="nieve-vainilla" scale="0 0 0" position="-9.97 1.34 -39.52" rotation="0 -90 0" visible="false" class="cajas" onclick="verificar(this)" value="83"></a-entity>
+        <a-entity geometry="primitive: box" id="nutella" scale="0 0 0" position="-2.31 1.34 -25.51" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="84"></a-entity>
+        <a-entity geometry="primitive: box" id="pizza" scale="0 0 0" position="15.24 1.29 -40.88" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="85"></a-entity>
+        <a-entity geometry="primitive: box" id="salmon" scale="0 0 0" position="16.96 1.06 -23.97" rotation="0 135 0" visible="false" class="cajas" onclick="verificar(this)" value="86"></a-entity>
+        <a-entity geometry="primitive: box" id="spagetti" scale="0 0 0" position="2.94 1.34 -34.26" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="87"></a-entity>
+        <a-entity geometry="primitive: box" id="yogurt-griego" scale="0 0 0" position="-17.03 1.22 -28.79" rotation="0 90 0" visible="false" class="cajas" onclick="verificar(this)" value="88"></a-entity>
+        <a-entity geometry="primitive: box" id="refresco" scale="0 0 0" position="-5.84 1.3 -16.51" visible="false" class="cajas" onclick="verificar(this)" value="13"></a-entity>
+        <a-entity geometry="primitive: box" id="refresco" scale="0 0 0" position="-11.24 1.3 -16.51" visible="false" class="cajas" onclick="verificar(this)" value="13"></a-entity>
+        <a-entity geometry="primitive: box" id="nada1" scale="0 0 0" position="3.32687 1.33324 -29.88716" visible="false" class="cajas"></a-entity>
+        <a-entity geometry="primitive: box" id="nada2" scale="0 0 0" position="-2.692 1.33324 -29.88716" visible="false" class="cajas"></a-entity>
+
+
+
+        <!--Mensajes tutorial VR-->
+        <a-entity id="msgVR" htmlembed scale="0 0 0" look-at="#back-eyes" position="206.61 1.6 2.7" class="clickable">
+            <div id="msgContainerVR" class="msgContainerVR" style="text-align:center; font-size:18px;">
+                <div class="pulse-animation"></div><br>
+                <div class="messages">
+                    <hr style="width:80%;">
+                    <div id="mensajesTutorialVR">
+                    </div>
+                    <hr style="width:80%">
+                </div>
+            </div>
+        </a-entity>
+
+
+        <!--Perfil alumno VR-->
+        <a-entity id="perfilVR" htmlembed scale="0 0 0" class="clickable">
+            <div class="msgContainerVR">
+                <div class="messages">
+                    <br>
+                    <h2>Registra tu perfil</h2><br>
+                    <div style="text-align:center">
+                        <p><strong>Rango de edad:</strong></p>
+                        <button value="e1" class="formPerfil edadPerfil" onclick="guardarEdad(this)">&#60;18</button>
+                        <button value="e2" class="formPerfil edadPerfil" onclick="guardarEdad(this)">18-25</button>
+                        <button value="e3" class="formPerfil edadPerfil" onclick="guardarEdad(this)">26-35</button>
+                        <button value="e4" class="formPerfil edadPerfil" onclick="guardarEdad(this)">36-50</button>
+                        <button value="e5" class="formPerfil edadPerfil" onclick="guardarEdad(this)">51&#60;</button>
+                    </div>
+                    <br>
+                    <div style="text-align:center">
+                        <p><strong>Sexo biológico de nacimiento:</strong></p>
+                        <button value="s1" class="formPerfil sexoPerfil" onclick="guardarSexo(this)">Masculino</button>
+                        <button value="s2" class="formPerfil sexoPerfil" onclick="guardarSexo(this)">Femenino</button>
+                        <button value="s3" class="formPerfil sexoPerfil" onclick="guardarSexo(this)">Intersexual</button>
+                    </div>
+                    <br>
+                    <div style="text-align:center">
+                        <p><strong>Actividad física:</strong></p>
+                        <button value="a1" class="formPerfil actPerfil" onclick="guardarAct(this)">Menos de 3 veces al mes</button>
+                        <button value="a2" class="formPerfil actPerfil" onclick="guardarAct(this)">1 o 2 veces por semana</button><br>
+                        <button value="a3" class="formPerfil actPerfil" onclick="guardarAct(this)">3 o 4 veces por semana</button>
+                        <button value="a4" class="formPerfil actPerfil" onclick="guardarAct(this)">Más de 4 veces por semana</button>
+                    </div>
+
+                    <br>
+                    <p style="text-align:center" id="msg-errorVR"></p>
+                    <button class="btn_guardar" onclick="guardarPerfil()" style="margin-bottom:15px">Guardar</button>
+                </div>
+            </div>
+        </a-entity>
+
+        <!--Info nutrimental VR-->
+        <a-entity id="infoContainer" htmlembed follow-position-hand class="clickable" look-at="#back-eyes" scale="0 0 0">
+            <div id="sellosVR" class="sellosVR"></div>
+            <br><br>
+            <div id="nombreProductoVR" class="nombreProductoVR"></div>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br>
+            <br><br><br><br><br><br><br><br>
+            <!--Info nutrimental-->
+            <div id="infoNutrimentalVR" class="infoNutrimentalVR clickable">
+                <p style="text-align:left; color: white; text-shadow: 1px 1px 2px black; font-weight: bold">Cada porción de este envase aporta:</p>
+                <div style="margin-bottom:5px; display:inline-block">
+                    <div class="infoNut">
+                        <p class="txtTitulo">Grasa saturada Cal/kcal</p>
+                        <p id="grasaSatVR" class="txtInfo"></p>
+                    </div>
+                    <div class="infoNut">
+                        <p class="txtTitulo">Otras grasas Cal/kcal</p>
+                        <p id="grasasOtrasVR" class="txtInfo"></p>
+                    </div>
+                    <div class="infoNut">
+                        <p class="txtTitulo">Azúcares totales Cal/kcal</p>
+                        <p id="azucaresVR" class="txtInfo"></p>
+                    </div>
+                    <div class="infoNut">
+                        <p class="txtTitulo">Sodio mg/g</p><br>
+                        <p id="sodioVR" class="txtInfo"></p>
+                    </div>
+                    <div class="infoNut">
+                        <p class="txtTitulo">Energía Cal/kcal</p><br>
+                        <p id="energiaVR" class="txtInfo"></p>
+                    </div>
+                </div>
+                <div class="botonesVR">
+                    <div>
+                        <button id="confirmarVR" class="btn-confirmarVR" onclick="confirmar()"><span class="glyphicon glyphicon-ok"/></button>
+                    </div>
+                    <div>
+                        <button id="cancelarVR" class="btn-cancelarVR" onclick="cancelar()"><span class="glyphicon glyphicon-remove"/></button>
+                    </div>
+                </div>
+                <p id="porcionesVR" class="porciones" style="text-align:left; color: white; text-shadow: 1px 1px 2px black; font-weight: bold;">></p>
+                <br>
+                <!--Cantidad-->
+                <div class="qtyCounter">
+                    <button class="btn-menos" onclick="down('1')"><span class="glyphicon glyphicon-minus"/></button>
+                    <div class="txtInput" id="myNumberVR">0</div>
+                    <button class="btn-mas" onclick="up()"><span class="glyphicon glyphicon-plus"/></button>
+                </div>
+            </div>
+        </a-entity>
+
+        <a-entity id="contProductoVR">
+            <a-entity id="productoVR"></a-entity>
+        </a-entity>
+
+        <a-entity id="listContainer" htmlembed scale="0 0 0" look-at="#back-eyes" follow-position-hand class="clickable">
+            <div style="width:900px; height:500px; position:relative">
+                <div id="carrito_VR" class="listaContainer">
+                    <div class="listaHeader">
+                        <div class="listaTitle"><strong>Carrito de compras</strong></div>
+                        <div class="listaClose" onclick="closeCarritoVR()"><span class="glyphicon glyphicon-remove" /></div>
+                    </div>
+
+                    <div id="listaProductosVR" style="overflow:hidden; height: 350px;">
+                        <p id="carrito_vacioVR" style="margin-left:15px; font-size:25px; z-index:1003"></p>
+                        <div class="row fila2 container">
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-5"></div>
+                            <div class="col-sm-5" id="porcionesRowVR"></div>
+                            <div class="col-sm-1"></div>
+                        </div>
+                        <div style="overflow:hidden; height: 350px;">
+                            <div id="tablaProductosVR">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="btn_vaciarVR" class="btn_vaciar" onclick="vaciar()">Vaciar carrito</div>
+
+                    <div class="listaFooter" align="center">
+                        <button id="scrollup" class="btn_scroll" onclick="scrollUp()"><span class="glyphicon glyphicon-chevron-up"/></button>
+                        <button id="scrolldown" class="btn_scroll" onclick="scrollDown()"><span class="glyphicon glyphicon-chevron-down"/></button>
+                    </div>
+
+                </div>
+            </div>
+        </a-entity>
+
+        <a-entity rigbox geometry="primitive:box" id="box1" scale="1 4 1" visible="false"></a-entity>
+
+        <!-- RIG -->
+        <a-entity camera-logger fade-teleporter id="rig" position="206.61 0 4.41" rotation="0 0 0" movement-controls="enabled:false; controls: keyboard; speed: 0.3; constrainToNavMesh:true">
+
+            <!-- RIG 
+      <a-entity camera-logger fade-teleporter id="rig" position="12.59 0 -9.05" rotation="0 0 0" movement-controls="enabled:false; controls: keyboard; speed: 0.3; constrainToNavMesh:true"> -->
+
+            <a-entity id="Audio_cancel" sound="src: #cancel"></a-entity>
+            <a-entity id="Audio_cash" sound="src: #cash"></a-entity>
+            <a-entity id="Audio_message" sound="src: #message"></a-entity>
+            <a-entity id="Audio_open" sound="src: #open"></a-entity>
+            <a-entity id="Audio_backgroundmusic" sound="src: #backgroundmusic; loop:true"></a-entity>
+
+
+            <!-- cámara -->
+            <a-camera id="head" position="0 1.6 0" rotation="0 0 0" look-controls="pointerLockEnabled: false" wasd-controls="enabled:false" nav-agent="speed: 1.5">
+                <a-entity id="cursor1" scale="0 0 0">
+                    <a-entity cursor raycaster="far: 3;  objects: #comienzaTutorial, #continuarTutorial, #finTutorial, .cajasTuto, .cajas, .clickable, #next, #prev" position="0 0 -1" geometry="primitive: ring; radiusInner: 0.03; radiusOuter: 0.04" material="color: #0b89ca; shader: flat"
+                        animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1" animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 2000; from: 1 1 1; to: 0.1 0.1 0.1"
+                        animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 1 1 1">
+                    </a-entity>
+                </a-entity>
+                <a-entity id="back-eyes" position="0 0 1"></a-entity>
+
+            </a-camera>
+
+            <!-- mano izquierda: laser, teleport, agarra y sostiene productos-->
+            <a-entity grablistener id="leftHand" hand-controls="hand:left; handModelStyle:highPoly;autoHide:false;" laser-controls="hand: left;autoHide:false;" visible="true" raycaster="objects:#inicio, #comienzaTutorial, #continuarTutorial, #finTutorial, #confirmar, #cancelar, #checkout, #next, #prev, #VR_reset, .cajas, .cajasTuto, .clickable">
+                <a-entity id="VR_carrito" scale="0 0 0" position="0 .01 .13" rotation="0 -90 90" htmlembed class="clickable">
+                    <div class="carritoContainer" style="background-color: transparent">
+                        <div id="contadorCarritoVR" class="contadorCarritoVR">0</div>
+                        <div class="btn_carritoVR" onclick="carritoVR()"><span class="glyphicon glyphicon-shopping-cart" /></div>
+                        <div id="calsVR" style="white-space: nowrap; z-index:1; top:20px; left:160px; color:white; background-color:#2F2D2D; border-radius:20px; padding-left:88px; margin-left:22px; padding-right:20px; font-size:45px; font-weight:bold; font-family: Arial, 'Verdana', Helvetica, sans-serif; float: left;">0 kcal</div>
+                    </div>
+                </a-entity>
+
+            </a-entity>
+
+            <!-- mano derecha: laser-->
+            <a-entity buttonlistener grablistener id="rightHand" laser-controls="hand: right;autoHide:false;" hand-controls="hand:right; handModelStyle:highPoly;autoHide:false;" visible="true" raycaster="objects:#inicio, #comienzaTutorial, #continuarTutorial, #finTutorial, #confirmar, #cancelar, #checkout, #next, #prev, #VR_carrito, .cajas, .cajasTuto, .clickable">
+                <a-entity id="VR_reset" scale="0 0 0" position="0 .01 .13" rotation="180 -90 90" htmlembed class="clickable">
+                    <div class="carritoContainer">
+                        <div class="btn_carritoVR" onclick="reiniciar()"><span class="glyphicon glyphicon-refresh" /></div>
+                        <div style="white-space: nowrap; z-index:1; top:20px; left:160px; color:white; background-color:#2F2D2D; border-radius:20px; padding-left:88px; margin-left:22px; padding-right:20px; font-size:45px; font-weight:bold; font-family: Arial, 'Verdana', Helvetica, sans-serif; float: left;">Reiniciar</div>
+                    </div>
+                </a-entity>
+            </a-entity>
+
+
+
+        </a-entity>
+
+
+
+        <!----<a-entity light="type: ambient; color: #fff; intensity: 1.5"></a-entity>-->
+        <a-entity light="type: ambient; color: #fff; intensity: 1"></a-entity>
+        <a-entity light="type: ambient; color: #fff; intensity: 2" position="204 1 1"></a-entity>
+        <a-entity light="type: directional; color: #BBB; intensity: 0.7;" position="-0.5 1 1"></a-entity>
+        <a-entity light="type: hemisphere; color: #BBB; groundColor: #f9ffb9; intensity: .6"></a-entity>
+        <a-entity light="type: point; intensity: 0.55; distance: 50; decay: 2"></a-entity>
+
+
+    </a-scene>
+
+</body>
+
+</html>
